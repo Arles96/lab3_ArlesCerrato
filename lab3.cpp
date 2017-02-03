@@ -13,7 +13,9 @@ void FillInMatrix(char** , int);
 void PrintMatrix(char**, int);
 //balanceo de la cadena
 void BalanceWord(string);
-//
+//funcion para los 0 y los 1
+char** NumberMatrix(char**, int);
+
 
 int main ()
 {
@@ -53,7 +55,9 @@ int main ()
 			matrix = MinesMatrix(matrix,n);
 			PrintMatrix(matrix,n);
 			cout<< endl;
-			
+			matrix = NumberMatrix(matrix,n);
+			PrintMatrix(matrix,n);
+			cout<< endl;
 		}
 		else {
 			string word;
@@ -71,7 +75,7 @@ void FillInMatrix(char** matrix, int n)
 {
 	for (int i=0; i<n; i++){
 		for (int j=0; j<n;j++){
-			matrix[i][j]= 'p';
+			matrix[i][j]= '0';
 		}
 	}
 }
@@ -155,4 +159,51 @@ void BalanceWord(string word)
 			cout<<"Esta banlaceado" << endl;
 		}
 	}
+}
+
+char** NumberMatrix(char** matrix, int n)
+{
+	for (int i=0; i<n; i++){
+		for (int j=0; j<n; j++){
+			if (matrix[i][j]=='*'){
+				//primer esquina
+				int f11 = i-1;
+				int f12 = j-1;
+				if ((f11>=0 && f11<n) && (f12>=0 &&f12<n))
+					matrix[f11][f12] = '1';
+				//arriba
+				int f2 = i-1;
+				if (f2>=0 && f2<n)
+					matrix[f2][j]='1';
+				//Segunda esquina
+				int f31 = i-1;
+				int f32 = j+1;
+				if ((f31>=0 && f31<n) && (f32>=0 && f32<n))
+					matrix[f31][f32]='1';
+				//lado izquierdo
+				int f4 = j-1;
+				if (f4>=0 && f4<n)
+					matrix[i][f4] = '1';
+				//lado derecho
+				int f5 = j+1;
+				if (f5>=0 && f5<n)
+					matrix[i][f5]='1';
+				//tercera esquina
+				int f61 = i+1;
+				int f62 = j-1;
+				if ((f61>=0 && f61<n) && (f62>=0 && f62<n))
+					matrix[f61][f62]='1';
+				//abajo
+				int f7 = i+1;
+				if (f7>=0 && f7<n)
+					matrix[f7][j] = '1';
+				//cuarta esquina
+				int f81 = i+1;
+				int f82 = j+1;
+				if ((f81>=0 && f81<n) && (f82>=0 && f82<n))
+					matrix[f81][f82]='1';
+			}
+		}
+	}
+	return matrix;
 }
