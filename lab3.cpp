@@ -9,13 +9,16 @@ using namespace std;
 char** MinesMatrix(char** , int);
 //Funcion para llenar la matriz
 void FillInMatrix(char** , int);
+//Funcion para llenar la matriz de juego
+void FillInMatrix2(char**, int);
 //Impresion de matriz
 void PrintMatrix(char**, int);
 //balanceo de la cadena
 void BalanceWord(string);
 //funcion para los 0 y los 1
 char** NumberMatrix(char**, int);
-
+//Liberar Memoria
+void DeleteMemory(char**, int);
 
 int main ()
 {
@@ -47,17 +50,75 @@ int main ()
 			for (int i=0; i<n; i++){
 				matrix[i] = new char [n];
 			}
+			char** matrixGame = new char*[n];
+			for (int i=0; i<n; i++){
+				matrixGame[i] = new char [n];
+			}
 			//llenado de matriz
 			FillInMatrix(matrix,n);
-			PrintMatrix(matrix,n);
-			cout<< endl;
+			FillInMatrix(matrixGame, n);
+			//PrintMatrix(matrix,n);
+			//cout<< endl;
 			//Ingreso de minas
 			matrix = MinesMatrix(matrix,n);
-			PrintMatrix(matrix,n);
-			cout<< endl;
+			//PrintMatrix(matrix,n);
+			//cout<< endl;
 			matrix = NumberMatrix(matrix,n);
-			PrintMatrix(matrix,n);
-			cout<< endl;
+			//PrintMatrix(matrix,n);
+			//cout<< endl;
+			cout<<"Comienza el juego" << endl;
+			int x,y;
+			//Verificador del juego si gano el usuario
+			bool v;
+			while (true){
+				cout<<"Ingrese la posicion x: ";
+				cin>>x;
+				while (x<0 || x>n-1){
+					cout<<"Error" << endl;
+					cout<<"Ingrese la posicion x: ";
+					cin>>x;
+				}
+				cout<<"Ingrese la posicion y: ";
+				cin>>y;
+				while (y<0 || y>n-1){
+					cout<<"Error" << endl;
+					cout<<"Ingrese la posicion y: ";
+					cin>>y;
+				}
+				if (matrix[x][y]=='1'){
+					matrixGame[x][y] = '1';
+					PrintMatrix(matrixGame,n);
+				}
+				else if (matrix[x][y]=='*'){
+					matrixGame[x][y]='*';
+					PrintMatrix(matrix, n);
+					cout<<"Has Perdido" << endl;
+					break;
+				}
+				else if (matrix[x][y]=='0'){
+					
+				}
+				for (int i=0;i<n;i++){
+					for (int j=0; j<n;j++){
+						if (matrixGame[i][j]=='s'){
+							v = true;
+							break;
+						}
+						else {
+							v = false;
+						}
+					}
+					if (v==true){
+						break;
+					}
+				}
+				if (v==false){
+					cout<<"Has ganado el juego" << endl;
+					break;
+				}
+				
+			}
+			DeleteMemory(matrix,n);
 		}
 		else {
 			string word;
@@ -76,6 +137,15 @@ void FillInMatrix(char** matrix, int n)
 	for (int i=0; i<n; i++){
 		for (int j=0; j<n;j++){
 			matrix[i][j]= '0';
+		}
+	}
+}
+
+void FillInMatrix2(char** matrix, int n)
+{
+	for (int i=0; i<n; i++){
+		for (int j=0; j<n;j++){
+			matrix[i][j]='s';
 		}
 	}
 }
@@ -111,6 +181,7 @@ void PrintMatrix(char** matrix, int n)
 		}
 		cout<< endl;
 	}
+	cout<< endl;
 }
 
 void BalanceWord(string word)
@@ -206,4 +277,13 @@ char** NumberMatrix(char** matrix, int n)
 		}
 	}
 	return matrix;
+}
+
+void DeleteMemory(char** matrix, int n)
+{
+	for (int i=0;i<n; i++){
+		delete [] matrix[i];
+		matrix[i] = NULL;
+	}
+	delete [] matrix;
 }
