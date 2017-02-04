@@ -19,6 +19,8 @@ void BalanceWord(string);
 char** NumberMatrix(char**, int);
 //Liberar Memoria
 void DeleteMemory(char**, int);
+//Funcion para la revelacion de 0
+void ZeroRelevation(char**, char**, int, int, int);
 
 int main ()
 {
@@ -96,7 +98,9 @@ int main ()
 					break;
 				}
 				else if (matrix[x][y]=='0'){
-					
+					matrixGame[x][y]=='0';
+					ZeroRelevation(matrix,matrixGame,n,x,y);
+					PrintMatrix(matrixGame,n);			
 				}
 				for (int i=0;i<n;i++){
 					for (int j=0; j<n;j++){
@@ -112,7 +116,7 @@ int main ()
 						break;
 					}
 				}
-				if (v==false){
+				if (v==true){
 					cout<<"Has ganado el juego" << endl;
 					break;
 				}
@@ -165,8 +169,8 @@ char** MinesMatrix (char** matrix, int n)
 	//contador de minas
 	int counter = 0;
 	while (counter<=mines){
-		r1 = 1 + rand()%(10-1);
-		r2 = 1 + rand()%(10-1);
+		r1 = 1 + rand()%(n-1);
+		r2 = 1 + rand()%(n-1);
 		matrix[r1][r2] = '*';
 		counter++;
 	}
@@ -286,4 +290,51 @@ void DeleteMemory(char** matrix, int n)
 		matrix[i] = NULL;
 	}
 	delete [] matrix;
+}
+
+void ZeroRelevation(char** matrix, char** matrixGame, int n, int x, int y)
+{
+	if (matrix[x][y]=='1'){
+		return;
+	}
+	else {
+		matrixGame[x][y]='0';
+		//Primera esquina
+		int f11=x-1;
+		int f12=y-1;
+		//Arriba
+		int f2 = x-1;
+		//segunda esquina
+		int f31= x-1;
+		int f32 = y+1;
+		//lado izquierdo
+		int f4 = y-1;
+		//lado derecho
+		int f5= y+1;
+		//tercera esquina
+		int f61 = x+1;
+		int f62=y-1;
+		//abajo
+		int f7 = x+1;
+		//cuarta esquina
+		int f81 = x+1;
+		int f82 = y+1;
+		if ((f11>=0 && f11<n) && (f12>=0 && f12<n))
+			ZeroRelevation(matrix, matrixGame, n, f11, f12);
+		if (f2>=0 && f2<n)
+			ZeroRelevation(matrix,matrixGame,n,f2,y);
+		if ((f31>=0 && f31<n) && (f32>=0 && f32<n))
+			ZeroRelevation(matrix, matrixGame,n,f31,f32);
+		if (f4>=0 && f4<n)
+			ZeroRelevation(matrix,matrixGame,n,x,f4);
+		if (f5>=0 && f5<n)
+			ZeroRelevation(matrix,matrixGame,n,x,f5);
+		if ((f61>=0 && f61<n) && (f62>=0 && f62<n))
+			ZeroRelevation(matrix,matrixGame,n,f61,f62);
+		if (f7>=0 && f7<n)
+			ZeroRelevation(matrix,matrixGame,n,f7,y);
+		if ((f81>=0 && f81<n) && (f82>=0 && f82<n))
+			ZeroRelevation(matrix,matrixGame,n,f81,f82);
+	}
+
 }
